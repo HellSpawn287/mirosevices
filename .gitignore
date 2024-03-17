@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+target
 
 # Log file
 *.log
@@ -7,7 +8,6 @@
 # BlueJ files
 *.ctxt
 .idea
-*.pem
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -20,11 +20,13 @@
 *.zip
 *.tar.gz
 *.rar
+*.pem
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
 
-/user/src/main/resources/private-key.pem
-/user/src/main/resources/public-key.pem
-/user/src/main/resources/pkcs8.key
+#Keys
+./user/src/main/resources/*.pem
+./user/src/main/resources/pkcs8.key
+
