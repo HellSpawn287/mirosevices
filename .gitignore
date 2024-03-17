@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
+user/target/
+discovery/target/
 **/target/**
+/target/
 
 # Log file
 *.log
