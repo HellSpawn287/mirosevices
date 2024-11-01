@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: product
+  datasource:
+    url: jdbc:postgresql://localhost:5433/microservices
+    username: ${USER:postgres}
+    password: ${PASSWORD:password}
+  flyway:
+    default-schema: products
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none

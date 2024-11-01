@@ -1,0 +1,13 @@
+server:
+  port: 8282
+spring:
+  application:
+    name: basket
+  elasticsearch:
+#    uris: http://localhost:9200
+    username: elastic
+    password: Qtjt+xOtSP=dVLkm60vY
+jwt:
+  keys:
+    private: classpath:pkcs8.key
+    public: classpath:public-key.pem

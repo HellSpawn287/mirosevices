@@ -1,0 +1,15 @@
+ALTER TABLE products.PRODUCTCATEGORIES DROP COLUMN product_id;
+
+ALTER TABLE products.Reviews DROP COLUMN  product_id;
+
+ALTER TABLE products.Products DROP COLUMN id;
+
+ALTER TABLE products.Products ADD COLUMN id UUID DEFAULT uuid_generate_v4();
+
+ALTER TABLE products.Products ADD PRIMARY KEY (id);
+
+ALTER TABLE products.PRODUCTCATEGORIES ADD COLUMN product_id UUID NOT NULL;
+ALTER TABLE products.PRODUCTCATEGORIES ADD CONSTRAINT FK_PRODUCTS FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE products.Reviews ADD COLUMN product_id UUID NOT NULL;
+ALTER TABLE products.Reviews ADD CONSTRAINT FK_PRODUCTS FOREIGN KEY (product_id) REFERENCES products(id);
