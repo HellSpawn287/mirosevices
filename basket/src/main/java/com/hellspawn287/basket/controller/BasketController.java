@@ -23,6 +23,7 @@ public class BasketController {
         basketService.addProduct(productDto);
     }
 
+    @PostMapping("/multiple")
     public void addProductList(@RequestBody List<ProductDto> productList) {
         basketService.addProductList(productList);
     }

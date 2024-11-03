@@ -43,9 +43,6 @@ public class BasketServiceImpl implements BasketService {
 
     @Override
     public void addProduct(ProductDto productDto) {
-        //sprawdzić  czy product istnieje w bazie. jeśli tak to czy jest to dodanie parti ilości produktu do koszyka.
-        // zapytać Endpoint Product service'u o pobranie produktu o danym id.
-//                interface ProductClient Feign
         ProductDto productFromDb = productClient.getProductById(productDto.getId());
         String username = getCurrentUserEmail()
                 .orElseThrow(() -> new NotFoundException("Username does not exists"));
@@ -91,7 +88,8 @@ public class BasketServiceImpl implements BasketService {
                 .collect(Collectors.toMap(pair -> pair.getLeft().getId(),
                         Function.identity()));
 
-        Map<UUID, Product> productMapFromBasket = getProductsFromBasketOfCurrentUser().stream()
+        Basket basket = getProductsFromBasketOfCurrentUser();
+        Map<UUID, Product> productMapFromBasket = basket.getProducts().stream()
                 .collect(Collectors.toMap(product -> product.getId(), Function.identity()));
 
         List<Product> collected = productMapFromBasket.entrySet().stream()
@@ -110,16 +108,20 @@ public class BasketServiceImpl implements BasketService {
         productMapFromDb.forEach((uuid, pair) -> collected
                 .add(productMapper.mapProductDtoProduct(pair.getLeft())));
 
+        basket.setProducts(collected);
+
+        basketRepository.save(basket);
+
     }
 
-    private List<Product> getProductsFromBasketOfCurrentUser() {
+    private Basket getProductsFromBasketOfCurrentUser() {
         String username = getCurrentUserEmail()
                 .orElseThrow(() -> new NotFoundException("Username does not exists"));
         Optional<Basket> optionalBasket = basketRepository.findByUsername(username);
 
         Basket basket = optionalBasket.orElseGet(() -> new Basket(null, username, new ArrayList<>()));
 
-        return basket.getProducts();
+        return basket;
     }
 
     private Optional<Basket> getBasketOfCurrentUser() {

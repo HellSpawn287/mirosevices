@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface BasketRepository extends ElasticsearchRepository<Basket, String> {
 
     Optional<Basket> findByUsername(String username);
+
 }
