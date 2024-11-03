@@ -1,10 +1,12 @@
 package com.hellspawn287.product.service;
 
 import com.hellspawn287.dtos.ProductDto;
-import com.hellspawn287.product.repository.ProductRepository;
 import com.hellspawn287.product.model.Product;
+import com.hellspawn287.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -35,5 +37,9 @@ public class ProductService {
 
     public void deleteById(UUID productId) {
         repository.deleteById(productId);
+    }
+
+    public Page<Product> getPageProducts(Pageable pageRequest) {
+        return repository.findAll(pageRequest);
     }
 }

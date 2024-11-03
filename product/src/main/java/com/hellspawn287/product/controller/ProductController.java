@@ -5,6 +5,7 @@ import com.hellspawn287.dtos.ProductDto;
 import com.hellspawn287.product.mapper.ProductMapper;
 import com.hellspawn287.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,15 +31,19 @@ public class ProductController {
 
     @PostMapping()
     public ProductDto save(@RequestBody ProductDto product) {
-        return productMapper.mapProductToDto(
-                productService.save(productMapper.mapProductDtoToProduct(product))
-        );
+        return productMapper.mapProductToDto(productService.save(productMapper.mapProductDtoToProduct(product)));
     }
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductById(@PathVariable UUID productId) {
         productService.deleteById(productId);
+    }
+
+    @GetMapping
+    public Page<ProductDto> getAllProductsInWarehouse(@RequestParam int page, @RequestParam int size) {
+        return productService.getPageProducts(productMapper.toPageRequest(page, size))
+                .map(productMapper::mapProductToDto);
     }
 
 }
