@@ -23,9 +23,11 @@ public class ProductController {
         return productMapper.mapProductToDto(productService.getById(productId));
     }
 
+    // TODO: changeProductQuantityById
+
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProduct(@PathVariable ProductDto product) {
+    public void updateProduct(@RequestBody ProductDto product) {
         productService.update(product);
     }
 

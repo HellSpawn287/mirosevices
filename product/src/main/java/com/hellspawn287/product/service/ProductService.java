@@ -27,6 +27,7 @@ public class ProductService {
         Product productDb = getById(product.getId());
         productDb.setName(product.getName());
         productDb.setQuantity(product.getQuantity());
+        productDb.setDescription(product.getDescription());
         productDb.setPrice(product.getPrice());
         repository.save(productDb);
     }
