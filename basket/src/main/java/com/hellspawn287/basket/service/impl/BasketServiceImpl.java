@@ -70,11 +70,13 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public void addProductList(List<ProductDto> productList) {
         List<Callable<Pair<ProductDto, Integer>>> callableProducts = new ArrayList<>(productList.size());
-        productList.forEach(productDto -> callableProducts.add(() -> Pair.of(productClient.getProductById(productDto.getId()), productDto.getQuantity())));
+        productList.forEach(productDto -> callableProducts
+                .add(() -> Pair
+                        .of(productClient.getProductById(productDto.getId()), productDto.getQuantity())));
         List<Future<Pair<ProductDto, Integer>>> futureList = executorService.invokeAll(callableProducts);
 
-        //pobrać wyniki zapytań wielowątkowych
-        List<Pair<ProductDto, Integer>> productsFromDb = futureList.stream().map(productDtoFuture -> {
+        //pobranie wyników zapytań wielowątkowych
+        List<Pair<ProductDto, Integer>> pairOfproductDbAndAddedQuantity = futureList.stream().map(productDtoFuture -> {
             try {
                 return productDtoFuture.get();
             } catch (InterruptedException e) {
@@ -84,7 +86,7 @@ public class BasketServiceImpl implements BasketService {
             }
         }).toList();
 
-        Map<UUID, Pair<ProductDto, Integer>> productMapFromDb = productsFromDb.stream()
+        Map<UUID, Pair<ProductDto, Integer>> pairByUUIDMap = pairOfproductDbAndAddedQuantity.stream()
                 .collect(Collectors.toMap(pair -> pair.getLeft().getId(),
                         Function.identity()));
 
@@ -93,19 +95,22 @@ public class BasketServiceImpl implements BasketService {
                 .collect(Collectors.toMap(product -> product.getId(), Function.identity()));
 
         List<Product> collected = productMapFromBasket.entrySet().stream()
-                .map(entry -> {
-                    Pair<ProductDto, Integer> pairProductDto = productMapFromDb.remove(entry.getKey());
+                .map(entryFromBasket -> {
+                    Pair<ProductDto, Integer> pairProductDbAndAddedQuantity = pairByUUIDMap.remove(entryFromBasket.getKey());
 
-                    if (pairProductDto == null) {
-                        return entry.getValue();
+                    if (pairProductDbAndAddedQuantity == null) {
+//                        TODO: Add logging
+                        return entryFromBasket.getValue();
                     }
-                    calculateQuantityForBasket(productMapFromBasket.get(pairProductDto.getLeft().getId())
-                            .getQuantity(), entry.getValue().getQuantity(), entry.getValue());
 
-                    return entry.getValue();
+                    Integer quantityFromWarehouse = pairProductDbAndAddedQuantity.getLeft().getQuantity();
+                    Integer quantityOfAddedProduct = pairProductDbAndAddedQuantity.getRight();
+                    calculateQuantityForBasket(quantityFromWarehouse,quantityOfAddedProduct, entryFromBasket.getValue());
+
+                    return entryFromBasket.getValue();
                 }).collect(Collectors.toList());
 
-        productMapFromDb.forEach((uuid, pair) -> collected
+        pairByUUIDMap.forEach((uuid, pair) -> collected
                 .add(productMapper.mapProductDtoProduct(pair.getLeft())));
 
         basket.setProducts(collected);
@@ -134,12 +139,12 @@ public class BasketServiceImpl implements BasketService {
         return productFromDb.getQuantity() < productDto.getQuantity() ? productFromDb.getQuantity() : productDto.getQuantity();
     }
 
-    private static void calculateQuantityForBasket(Integer warehouseProductQuantity, Integer productDtoQuantity, Product basketProductQuantity) {
-        int quantitySum = basketProductQuantity.getQuantity() + productDtoQuantity;
-        if (warehouseProductQuantity < quantitySum) {
-            basketProductQuantity.setQuantity(warehouseProductQuantity);
+    private static void calculateQuantityForBasket(Integer quantityInWarehouse, Integer quantityOfAddedProduct, Product productFromBasket) {
+        int quantitySum = productFromBasket.getQuantity() + quantityOfAddedProduct;
+        if (quantityInWarehouse < quantitySum) {
+            productFromBasket.setQuantity(quantityInWarehouse);
         } else {
-            basketProductQuantity.setQuantity(quantitySum);
+            productFromBasket.setQuantity(quantitySum);
         }
     }
 
