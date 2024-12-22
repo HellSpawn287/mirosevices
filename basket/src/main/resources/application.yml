@@ -4,9 +4,23 @@ spring:
   application:
     name: basket
   elasticsearch:
-#    uris: http://localhost:9200
+    #    uris: http://localhost:9200
     username: elastic
     password: Qtjt+xOtSP=dVLkm60vY
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    properties:
+      # CCloud broker connection parameters
+      request.timeout.ms: 20000
+      retry.backoff.ms: 500
+
+
+      # CCloud Schema Registry Connection parameter
+      schema.registry.url: http://localhost:8081
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 jwt:
   keys:
     private: classpath:pkcs8.key

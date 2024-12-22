@@ -1,5 +1,6 @@
 package com.hellspawn287.basket.service.impl;
 
+import com.hellspawn287.avro.ProductBasket;
 import com.hellspawn287.basket.clients.ProductClient;
 import com.hellspawn287.basket.mapper.ProductMapper;
 import com.hellspawn287.basket.model.Basket;
@@ -11,6 +12,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +33,7 @@ public class BasketServiceImpl implements BasketService {
     private final BasketRepository basketRepository;
     private final ExecutorService executorService;
     private final ProductMapper productMapper;
-
+    private final KafkaTemplate<String, ProductBasket> kafkaTemplate; // TODO: dokończyć
 
     public List<Product> getProductsByCurrentUser() {
         String username = getCurrentUserEmail()
@@ -64,6 +66,14 @@ public class BasketServiceImpl implements BasketService {
                 );
 
         basketRepository.save(basket);
+
+        ProductBasket productBasket = ProductBasket.newBuilder()
+                .setProductQuantity(calculateQuantityForEmptyBasket(productDto, productFromDb))
+                .setOwner(username)
+                .setProductID(productFromDb.getId().toString())
+                .build();
+
+        kafkaTemplate.send("products-basket", productBasket);
     }
 
     @SneakyThrows
@@ -105,7 +115,7 @@ public class BasketServiceImpl implements BasketService {
 
                     Integer quantityFromWarehouse = pairProductDbAndAddedQuantity.getLeft().getQuantity();
                     Integer quantityOfAddedProduct = pairProductDbAndAddedQuantity.getRight();
-                    calculateQuantityForBasket(quantityFromWarehouse,quantityOfAddedProduct, entryFromBasket.getValue());
+                    calculateQuantityForBasket(quantityFromWarehouse, quantityOfAddedProduct, entryFromBasket.getValue());
 
                     return entryFromBasket.getValue();
                 }).collect(Collectors.toList());

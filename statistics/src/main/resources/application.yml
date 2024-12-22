@@ -1,0 +1,21 @@
+server:
+  port: 8383
+spring:
+  application:
+    name: statistics
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    properties:
+      # CCloud broker connection parameters
+      request.timeout.ms: 20000
+      retry.backoff.ms: 500
+
+      # CCloud Schema Registry Connection parameter
+      schema.registry.url: http://localhost:8081
+
+    consumer:
+#      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
