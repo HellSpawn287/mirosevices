@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "ProductBasket",
+  "namespace": "com.hellspawn287.avro",
+  "fields": [
+    {
+      "name": "productID",
+      "type": "string"
+    },
+    {
+      "name": "productQuantity",
+      "type": "int"
+    },
+    {
+      "name": "owner",
+      "type": "string"
+    }
+  ]
+}
