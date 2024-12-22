@@ -31,6 +31,26 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+
+<!--		https://packages.confluent.io/maven/io/confluent/kafka-schema-registry-client/7.8.0/kafka-schema-registry-client-7.8.0.pom-->
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-schema-registry-client</artifactId>
+			<version>${io.confluent.version}</version>
+		</dependency>
+
+<!--		https://packages.confluent.io/maven/io/confluent/kafka-avro-serializer/7.8.0/kafka-avro-serializer-7.8.0.pom-->
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-avro-serializer</artifactId>
+			<version>${io.confluent.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
@@ -74,12 +94,17 @@
 			<version>3.17.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -151,6 +176,10 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>confluent</id>
+			<url>https://packages.confluent.io/maven/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
