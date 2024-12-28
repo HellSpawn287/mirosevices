@@ -33,7 +33,7 @@ public class BasketServiceImpl implements BasketService {
     private final BasketRepository basketRepository;
     private final ExecutorService executorService;
     private final ProductMapper productMapper;
-    private final KafkaTemplate<String, ProductBasket> kafkaTemplate; // TODO: dokończyć
+    private final KafkaTemplate<String, ProductBasket> kafkaTemplate;
 
     public List<Product> getProductsByCurrentUser() {
         String username = getCurrentUserEmail()
@@ -67,13 +67,17 @@ public class BasketServiceImpl implements BasketService {
 
         basketRepository.save(basket);
 
-        ProductBasket productBasket = ProductBasket.newBuilder()
+        ProductBasket productBasket = getProductBasketBasedOnProductDto(productDto, productFromDb, username);
+
+        kafkaTemplate.send("products-basket", productBasket);
+    }
+
+    private static ProductBasket getProductBasketBasedOnProductDto(ProductDto productDto, ProductDto productFromDb, String username) {
+        return ProductBasket.newBuilder()
                 .setProductQuantity(calculateQuantityForEmptyBasket(productDto, productFromDb))
                 .setOwner(username)
                 .setProductID(productFromDb.getId().toString())
                 .build();
-
-        kafkaTemplate.send("products-basket", productBasket);
     }
 
     @SneakyThrows
@@ -121,12 +125,48 @@ public class BasketServiceImpl implements BasketService {
                 }).collect(Collectors.toList());
 
         pairByUUIDMap.forEach((uuid, pair) -> collected
-                .add(productMapper.mapProductDtoProduct(pair.getLeft())));
+                .add(productMapper.mapProductDtoToProduct(pair.getLeft())));
 
         basket.setProducts(collected);
 
         basketRepository.save(basket);
 
+        sendToKafkaPerProductDto(productList, productMapFromBasket);
+
+    }
+
+    @Override
+    public void cleanBasket() {
+        String username = getCurrentUserEmail()
+                .orElseThrow(() -> new NotFoundException("Username does not exists"));
+        Optional<Basket> optionalBasket = basketRepository.findByUsername(username);
+
+        optionalBasket.ifPresent(basket -> {
+            basketRepository.deleteById(basket.getId());
+        });
+    }
+
+    @Override
+    public void removeProduct(UUID productId) {
+        String username = getCurrentUserEmail()
+                .orElseThrow(() -> new NotFoundException("Username does not exists"));
+        Optional<Basket> optionalBasket = basketRepository.findByUsername(username);
+        optionalBasket.ifPresent(basket -> {
+            basket.getProducts().removeIf(product -> product.getId().equals(productId));
+            basketRepository.save(basket);
+        });
+    }
+
+    private void sendToKafkaPerProductDto(List<ProductDto> productList, Map<UUID, Product> productMapFromBasket) {
+        productList.forEach(productDto -> mapProductDtoToProductBasketAndSendToKafka(productDto, productMapFromBasket));
+    }
+
+    private void mapProductDtoToProductBasketAndSendToKafka(ProductDto productDto, Map<UUID, Product> productMapFromBasket) {
+        Product product = productMapFromBasket.get(productDto.getId());
+        String username = getCurrentUserEmail()
+                .orElseThrow(() -> new NotFoundException("Username does not exists"));
+        ProductBasket productBasket = getProductBasketBasedOnProductDto(productDto, productMapper.mapProductToProductDto(product), username);
+        kafkaTemplate.send("products-basket", productBasket);
     }
 
     private Basket getProductsFromBasketOfCurrentUser() {
@@ -156,27 +196,5 @@ public class BasketServiceImpl implements BasketService {
         } else {
             productFromBasket.setQuantity(quantitySum);
         }
-    }
-
-    @Override
-    public void cleanBasket() {
-        String username = getCurrentUserEmail()
-                .orElseThrow(() -> new NotFoundException("Username does not exists"));
-        Optional<Basket> optionalBasket = basketRepository.findByUsername(username);
-
-        optionalBasket.ifPresent(basket -> {
-            basketRepository.deleteById(basket.getId());
-        });
-    }
-
-    @Override
-    public void removeProduct(UUID productId) {
-        String username = getCurrentUserEmail()
-                .orElseThrow(() -> new NotFoundException("Username does not exists"));
-        Optional<Basket> optionalBasket = basketRepository.findByUsername(username);
-        optionalBasket.ifPresent(basket -> {
-            basket.getProducts().removeIf(product -> product.getId().equals(productId));
-            basketRepository.save(basket);
-        });
     }
 }
