@@ -1,0 +1,17 @@
+${AnsiColor.BRIGHT_GREEN}           ____                      ,
+${AnsiColor.BRIGHT_GREEN}          /---.'.__             ____//
+${AnsiColor.BRIGHT_GREEN}               '--.\           /.---'
+${AnsiColor.BRIGHT_GREEN}          _______  \\         //
+${AnsiColor.BRIGHT_GREEN}        /.------.\  \|      .'/  ______
+${AnsiColor.BRIGHT_GREEN}       //  ___  \ \ ||/|\  //  _/_----.\__
+${AnsiColor.BRIGHT_GREEN}      |/  /.-.\  \ \:|< >|// _/.'..\   '--'
+${AnsiColor.BRIGHT_GREEN}         //   \'. | \'.|.'/ /_/ /  \\
+${AnsiColor.BRIGHT_GREEN}        //     \ \_\/" ' ~\-'.-'    \\
+${AnsiColor.BRIGHT_GREEN}       //       '-._| :H: |'-.__     \\
+${AnsiColor.BRIGHT_GREEN}      //           (/'==='\)'-._\     ||
+${AnsiColor.BRIGHT_GREEN}      ||                        \\    \|
+${AnsiColor.BRIGHT_GREEN}      ||        Tonight's        \\    '
+${AnsiColor.BRIGHT_GREEN}      |/           the            \\
+${AnsiColor.BRIGHT_GREEN}                  night            ||
+${AnsiColor.BRIGHT_GREEN}                                   ||
+${AnsiColor.BRIGHT_GREEN}                                   \\

@@ -1,0 +1,30 @@
+${AnsiColor.BRIGHT_GREEN}                      _________
+${AnsiColor.BRIGHT_GREEN}                _.--'''   _   _'''_--._
+${AnsiColor.BRIGHT_GREEN}            _.-' _  / \  (_  |_) |_  _`-.
+${AnsiColor.BRIGHT_GREEN}          .'    /  /---\ ._) |   |_ |_) ` .
+${AnsiColor.BRIGHT_GREEN}        .'      \_.  _.--'''''--..  | \     '.
+${AnsiColor.BRIGHT_GREEN}      ,'        _,-'   _..--''--..`'-.        `.
+${AnsiColor.BRIGHT_GREEN}     /        .'     .'            `'. `.       `.
+${AnsiColor.BRIGHT_GREEN}    /       .'     .'                 '. `.       \
+${AnsiColor.BRIGHT_GREEN}   /      .'      /        . _          \  `.      \
+${AnsiColor.BRIGHT_GREEN}  ;      /       ;        / / `       .-.'   \      ;
+${AnsiColor.BRIGHT_GREEN}  |     '       ;           '            |    '      |
+${AnsiColor.BRIGHT_GREEN} ;     ;        |             _       _   .    |.-.   ;
+${AnsiColor.BRIGHT_GREEN} |     |        '            / `\   .' \  |    / / __.-.
+${AnsiColor.BRIGHT_GREEN}.'    |          \           '   ;  |  | ;   .' _`'--/`|
+${AnsiColor.BRIGHT_GREEN}|     |           \           \-.|  |-.'/ _.'  '   -' /
+${AnsiColor.BRIGHT_GREEN}|     ;            `.         _\_| _'_/(-'    .'`'--'` |
+${AnsiColor.BRIGHT_GREEN}' ___ '.             `.       _,  ' `   \    /  |   _  ;
+${AnsiColor.BRIGHT_GREEN} | |   |        ,''-._ `-.     |`-._    ;  .'    ' |_   |
+${AnsiColor.BRIGHT_GREEN} ; |   ;       /      `'-'\    `-'   _.' .'     ;  |_  '
+${AnsiColor.BRIGHT_GREEN}  | |_| \     ;            `    .--'` _.'       / |_/  ;
+${AnsiColor.BRIGHT_GREEN}  ; | | _\    |     _.             |-'         /_ | \ '
+${AnsiColor.BRIGHT_GREEN}   \   |_ '. _\   /`'              ;         .'/     '
+${AnsiColor.BRIGHT_GREEN}    \  |_   `._   \                '       _'  \_   /
+${AnsiColor.BRIGHT_GREEN}     '      _ '`| /               /      .   / \   ,'
+${AnsiColor.BRIGHT_GREEN}      `.   |_  _ '-._           .'     ,'   /---\ .
+${AnsiColor.BRIGHT_GREEN}        '. |  |_) .  `_-._.____'_ .- '   |_|   .'
+${AnsiColor.BRIGHT_GREEN}          `.  | \ |  |_ .     _  |  \_/  | | .'
+${AnsiColor.BRIGHT_GREEN}            `-._  |  |_ |\ | | \ |_  |  _.-'
+${AnsiColor.BRIGHT_GREEN}                ''-._   ' \| |_/   _..-'
+${AnsiColor.BRIGHT_GREEN}                     `'''------'''`

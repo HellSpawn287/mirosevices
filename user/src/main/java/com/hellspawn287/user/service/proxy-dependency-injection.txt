@@ -1,0 +1,26 @@
+Stworzyc interfejs UserService z metodami do:
+ - zapisu,
+ - aktualizacji,
+ - usuwania po id,
+ - pobierania po id
+
+Stworzyc klase ktora UserServiceImpl, ktora:
+ - implementauje UserService,
+ - ma zadeklarowana liste userow na ktorej to robione sa wszystkie operacje.
+
+Stworzyc klase UserProxyService ktora
+ - implementuje UserService
+ - posiada dwa pola:
+        - pierwszy to UserServiceImpl,
+        - druga to Map<Long, User> long to id usera.
+
+Metoda save bedzie wywolywac metode z userServiceImpl i dodawac wynik do mapy.
+Metoda update bedzie wywolywac:
+ - metode z userServiceImpl
+ - dodawac wynik do mapy.
+
+Metoda usuwania po id bedzie wywolywac metode z userServiceImpl i usuwac z mapy.
+
+Metoda pobierania po id bedzie sprawdzac czy takie id jest w mapie.
+Jesli tak to zwraca wartosc z niej, a jesli jej nie ma
+to wywoluje metoda z userServiceImpl i dodaje wynik do mapy
