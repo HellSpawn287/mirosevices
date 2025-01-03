@@ -5,7 +5,9 @@ import com.hellspawn287.dtos.ProductDto;
 import com.hellspawn287.product.mapper.ProductMapper;
 import com.hellspawn287.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,9 +45,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductDto> getAllProductsInWarehouse(@RequestParam int page, @RequestParam int size) {
-        return productService.getPageProducts(productMapper.toPageRequest(page, size))
+    public Page<ProductDto> getAllProductsInWarehouse(@RequestParam Integer page, @RequestParam Integer size) {
+        return productService.getPageProducts(mapToPageRequest(page, size))
                 .map(productMapper::mapProductToDto);
+    }
+
+    private Pageable mapToPageRequest(Integer page, Integer size) {
+        final int pageSize = ObjectUtils.min(ObjectUtils.firstNonNull(size, 100), 1000);
+        final int pageNumber = ObjectUtils.min(ObjectUtils.firstNonNull(page, 100), 1000);
+
+        return productMapper.toPageRequest(pageNumber, pageSize);
     }
 
 }
