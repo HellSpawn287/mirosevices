@@ -18,12 +18,12 @@ public class BasketController {
     private final BasketService basketService;
     private final ProductMapper productMapper;
 
-    @PostMapping()
+    @PutMapping()
     public void addProduct(@RequestBody ProductDto productDto) {
         basketService.addProduct(productDto);
     }
 
-    @PostMapping("/multiple")
+    @PutMapping("/multiple")
     public void addProductList(@RequestBody List<ProductDto> productList) {
         basketService.addProductList(productList);
     }
